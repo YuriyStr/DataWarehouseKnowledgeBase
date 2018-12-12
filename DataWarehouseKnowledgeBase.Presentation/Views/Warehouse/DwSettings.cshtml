@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Настройки хранилища";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        @using (Html.BeginForm("DwSettings", "Warehouse", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="form-group">
+                @Html.Label("Interval", "Интервал обновлений (мин)", new { @class = "col-md-4 control-label" })
+                <div class="col-md-6">
+                    @Html.TextBox("Interval", "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-4">
+                    <button name="action" value="submit" class="btn btn-default">Подтвердить</button>
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    <button name="action" value="update" class="btn btn-default">Обновить</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<p>@ViewBag.Message</p>

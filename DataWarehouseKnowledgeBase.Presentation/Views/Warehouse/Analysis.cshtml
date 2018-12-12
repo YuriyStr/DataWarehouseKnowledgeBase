@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "Анализ данных";
+}
+@using Microsoft.AspNetCore.Routing
+@model List<DataWarehouseKnowledgeBase.DAL.ViewModels.WarehouseViewModel>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        @using (Html.BeginForm("Analysis", "Warehouse", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="form-group">
+                @Html.Label("ProductCode", "Код товара", new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBox("ProductCode", "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("StoreCode", "Код магазина", new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBox("StoreCode", "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("DateString", "Дата (гггг-ММ-дд)", new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBox("DateString", "", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <input type="submit" value="Подтвердить" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Units</th>
+                <th>Money</th>
+                <th>Product code</th>
+                <th>Product name</th>
+                <th>Brand name</th>
+                <th>Category</th>
+                <th>Store code</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Year</th>
+                <th>Month</th>
+                <th>Day</th>
+                <th>Week day</th>
+                <th>Recommendation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.UnitsSold</td>
+                        <td>@item.MoneySold</td>
+                        <td>@item.ProductCode</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.BrandName</td>
+                        <td>@item.ProductCategory</td>
+                        <td>@item.StoreCode</td>
+                        <td>@item.City</td>
+                        <td>@item.Country</td>
+                        <td>@item.Year</td>
+                        <td>@item.Month</td>
+                        <td>@item.Day</td>
+                        <td>@item.WeekDay</td>
+                        <td>@item.Recommendation</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!(ViewData["Page"] is int pageNum))
+{
+    pageNum = 1;
+}
+<div class="container">
+    @Html.ActionLink("Previous", "Analysis", "Warehouse", new
+    {
+        ProductCode = ViewData["ProductCode"],
+        StoreCode = ViewData["StoreCode"],
+        DateString = ViewData["DateString"],
+        Page = pageNum - 1
+    }, null)
+    @Html.ActionLink("Next", "Analysis", "Warehouse", new
+    {
+        ProductCode = ViewData["ProductCode"],
+        StoreCode = ViewData["StoreCode"],
+        DateString = ViewData["DateString"],
+        Page = pageNum + 1
+    }, null)
+</div>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataWarehouseKnowledgeBase.Presentation", "DataWarehouseKnowledgeBase.Presentation\DataWarehouseKnowledgeBase.Presentation.csproj", "{2AAA781D-225F-47AA-BA02-89B144E55B02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataWarehouseKnowledgeBase.DAL", "DataWarehouseKnowledgeBase.DAL\DataWarehouseKnowledgeBase.DAL.csproj", "{3BF9FF50-EE22-44C8-A134-1C2CA6E93F36}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AAA781D-225F-47AA-BA02-89B144E55B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AAA781D-225F-47AA-BA02-89B144E55B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AAA781D-225F-47AA-BA02-89B144E55B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AAA781D-225F-47AA-BA02-89B144E55B02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF9FF50-EE22-44C8-A134-1C2CA6E93F36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF9FF50-EE22-44C8-A134-1C2CA6E93F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF9FF50-EE22-44C8-A134-1C2CA6E93F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF9FF50-EE22-44C8-A134-1C2CA6E93F36}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16B2124D-5BC0-46D6-A916-D64D64FAB326}
+	EndGlobalSection
+EndGlobal
