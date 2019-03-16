@@ -1,7 +1,7 @@
 ﻿namespace DataWarehouseKnowledgeBase.DAL.KbModels
 {
-    public interface IKbEvaluator<TParam>
+    public interface IKbEvaluator
     {
-        T GetAttribute<T>(string attributeName);
+        string GetAttribute(string attributeName, object parameter);
     }
 }

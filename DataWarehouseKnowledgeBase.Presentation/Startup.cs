@@ -45,6 +45,7 @@ namespace DataWarehouseKnowledgeBase.Presentation
                     Configuration.GetConnectionString("DataWarehouses.Properties.Settings.SalesDatabaseConnectionString")));
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IKbSerializer<KnowledgeBase>>(s => new KbSerializer<KnowledgeBase>(Configuration["KbLocation"]));
+            services.AddScoped<IKbEvaluator, KbEvaluator>();
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

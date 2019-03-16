@@ -1,16 +1,22 @@
 <?xml version="1.0"?>
-<KB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Parameter="p">
+<KB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Rules>
-    <Rule ThenAttributeName="Kek" ThenAttributeValue="Cheburek" RequiredAttributes="PriceCondition">
-      <Conditions>
-        <ConditionGroup InvertResult="false" GroupType="OR">
-          <Conditions>
-            <Condition InvertResult="false" Condition="test1" />
-            <Condition InvertResult="false" Condition="test2" />
-          </Conditions>
-        </ConditionGroup>
-        <Condition InvertResult="false" Condition="test3" />
-      </Conditions>
+    <Rule ThenAttributeName="PriceCondition" ThenAttributeValue="1" RequiredAttributes="UnitsSold;MoneySold">
+      <ConditionGroup InvertResult="false" GroupType="AND">
+        <Conditions>
+          <Condition InvertResult="false" Condition="{{UnitsSold}} &gt; 0" />
+          <Condition InvertResult="false" Condition="{{MoneySold}} / {{UnitsSold}} &lt; 100" />
+        </Conditions>
+      </ConditionGroup>
+    </Rule>
+    <Rule ThenAttributeName="PriceCondition" ThenAttributeValue="0" RequiredAttributes="UnitsSold;MoneySold">
+      <Condition />
+    </Rule>
+    <Rule ThenAttributeName="Recommendation" ThenAttributeValue="Цена выбрана удачно." RequiredAttributes="PriceCondition">
+      <Condition InvertResult="true" Condition="{{PriceCondition}} == 1" />
+    </Rule>
+    <Rule ThenAttributeName="Recommendation" ThenAttributeValue="&lt;b&gt;Необходимо поднять цену на товар.&lt;/b&gt;" RequiredAttributes="PriceCondition">
+      <Condition InvertResult="false" Condition="{{PriceCondition}} == 1" />
     </Rule>
   </Rules>
 </KB>

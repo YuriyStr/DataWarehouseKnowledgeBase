@@ -1,20 +1,31 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DataWarehouseKnowledgeBase.DAL.KbModels
 {
-    public class KbEvaluator<TParam> : IKbEvaluator<TParam>
+    public class KbEvaluator : IKbEvaluator
     {
         private readonly KnowledgeBase _kb;
-        private readonly TParam _parameter;
 
-        public KbEvaluator(KbSerializer<KnowledgeBase> serializer, TParam parameter)
+        public KbEvaluator(IKbSerializer<KnowledgeBase> serializer)
         {
-
+            _kb = serializer.Deserialize();
         }
 
-        public T GetAttribute<T>(string attributeName)
+        public string GetAttribute(string attributeName, object parameter)
         {
-            throw new System.NotImplementedException();
+            return parameter?.GetType().GetProperty(attributeName)?.GetValue(parameter)?.ToString() ??
+                _kb?.Rules?.Where(r => r.ThenAttributeName == attributeName)
+                    .FirstOrDefault(r => VerifyRule(r, parameter))
+                    ?.ThenAttributeValue;
+        }
+
+        private bool VerifyRule(Rule rule, object parameter)
+        {
+            var attributeDictionary = rule.RequiredAttributesSplitted
+                .Select(a => new KeyValuePair<string, string>(a, GetAttribute(a, parameter)))
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+            return rule.Condition?.Evaluate(attributeDictionary, parameter) ?? false;
         }
     }
 }
