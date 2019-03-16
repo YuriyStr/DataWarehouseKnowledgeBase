@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DataWarehouseKnowledgeBase.DAL.Data;
 using DataWarehouseKnowledgeBase.DAL.DwModels;
 using DataWarehouseKnowledgeBase.DAL.DbModels;
+using DataWarehouseKnowledgeBase.DAL.KbModels;
 using DataWarehouseKnowledgeBase.DAL.Repository;
 
 namespace DataWarehouseKnowledgeBase.Presentation
@@ -42,6 +44,7 @@ namespace DataWarehouseKnowledgeBase.Presentation
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DataWarehouses.Properties.Settings.SalesDatabaseConnectionString")));
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IKbSerializer<KnowledgeBase>>(s => new KbSerializer<KnowledgeBase>(Configuration["KbLocation"]));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

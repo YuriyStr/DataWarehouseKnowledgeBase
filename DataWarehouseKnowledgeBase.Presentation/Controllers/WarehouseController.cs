@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using DataWarehouseKnowledgeBase.DAL.KbModels;
 using DataWarehouseKnowledgeBase.DAL.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +15,12 @@ namespace DataWarehouseKnowledgeBase.Presentation.Controllers
         private readonly string _updateFile;
         private DateTime _lastUpdate;
         private int _interval;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IKbSerializer<KnowledgeBase> _serializer;
 
-        public WarehouseController(IRepository repository, IHostingEnvironment hostingEnvironment)
+        public WarehouseController(IRepository repository, IHostingEnvironment hostingEnvironment, IKbSerializer<KnowledgeBase> serializer)
         {
-            _hostingEnvironment = hostingEnvironment;
             _repository = repository;
+            _serializer = serializer;
             _updateFile = hostingEnvironment.ContentRootPath + "\\update.txt";
             SetTimes();
             CheckForUpdate();
@@ -74,6 +76,39 @@ namespace DataWarehouseKnowledgeBase.Presentation.Controllers
         [HttpGet]
         public ActionResult Analysis(string productCode, string storeCode, string dateString, int? page)
         {
+            _serializer.Serialize(new KnowledgeBase
+            {
+                Parameter = "p",
+                Rules = new List<Rule>
+                {
+                    new Rule
+                    {
+                        ThenAttributeName = "Kek",
+                        ThenAttributeValue = "Cheburek",
+                        RequiredAttributes = "PriceCondition",
+                        Conditions = new List<Condition>
+                        {
+                            new ConditionGroup
+                            {
+                                GroupType = "OR",
+                                Conditions = new List<Condition>
+                                {
+                                    new ConditionNode { Condition = "test1" },
+                                    new ConditionNode { Condition = "test2" }
+                                }
+                            },
+                            new ConditionNode
+                            {
+                                Condition = "test3"
+                            }
+                        }
+                    }
+                }
+            });
+            var knowledgeBase = _serializer.Deserialize();
+            ViewBag.Message = knowledgeBase.Rules[0].Conditions[0].InvertResult;
+            //ViewBag.Message = KbEvaluator.Test();
+
             int pageSize = 10;
             page = page ?? 1;
             if (String.IsNullOrEmpty(productCode))

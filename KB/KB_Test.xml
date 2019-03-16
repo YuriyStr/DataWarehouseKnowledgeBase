@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<KB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Parameter="p">
+  <Rules>
+    <Rule ThenAttributeName="Kek" ThenAttributeValue="Cheburek" RequiredAttributes="PriceCondition">
+      <Conditions>
+        <ConditionGroup InvertResult="false" GroupType="OR">
+          <Conditions>
+            <Condition InvertResult="false" Condition="test1" />
+            <Condition InvertResult="false" Condition="test2" />
+          </Conditions>
+        </ConditionGroup>
+        <Condition InvertResult="false" Condition="test3" />
+      </Conditions>
+    </Rule>
+  </Rules>
+</KB>
