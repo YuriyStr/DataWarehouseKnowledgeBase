@@ -87,6 +87,20 @@ namespace DataWarehouseKnowledgeBase.DAL.Repository
             return result;
         }
 
+        public AverageMoneyAndUnits CalculateAverageMoneyAndUnits(string productCode)
+        {
+            if (productCode == null) return null;
+            IQueryable<DwModels.Sales> query = _dwContext.Sales.Include(s => s.ProductProduct)
+                .Where(s => s.ProductProduct.ProductCode == productCode);
+            return query.GroupBy(s => s.ProductProduct.ProductId)
+                .Select(g => new AverageMoneyAndUnits
+                {
+                    AverageUnits = g.Average(s => s.UnitsSold ?? 0),
+                    AverageMoney = g.Average(s => s.MoneySold ?? 0)
+                })
+                .FirstOrDefault();
+        }
+
         private void AddNewStores()
         {
             var newStores = _dbContext.Store.Include(s => s.LocationLocation).ThenInclude(l => l.CountryCountry)

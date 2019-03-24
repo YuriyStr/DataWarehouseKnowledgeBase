@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using DataWarehouseKnowledgeBase.DAL.KbModels;
 using DataWarehouseKnowledgeBase.DAL.Repository;
+using DataWarehouseKnowledgeBase.DAL.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -96,9 +97,30 @@ namespace DataWarehouseKnowledgeBase.Presentation.Controllers
             var models = resultList.Skip(pageSize * (page.Value - 1)).Take(pageSize).ToList();
             models.ForEach(m =>
             {
-                m.Recommendation = _evaluator.GetAttribute("Recommendation", m);
+                m.OverallCondition = GetOverallCondition(m);
             });
             return View(models);
+        }
+
+        private double GetOverallCondition(WarehouseViewModel model)
+        {
+            var averageUnitsAndMoney = _repository.CalculateAverageMoneyAndUnits(model.ProductCode);
+            decimal averagePrice = 0, unitsMargin = 0, moneyMargin = 0;
+            if (averageUnitsAndMoney.AverageUnits != 0)
+            {
+                averagePrice = averageUnitsAndMoney.AverageMoney / averageUnitsAndMoney.AverageUnits;
+                unitsMargin = averageUnitsAndMoney.AverageUnits / 3;
+                moneyMargin = averagePrice / 3;
+            }
+            var kbParameter = new
+            {
+                LowerSaleBound = averageUnitsAndMoney.AverageUnits - unitsMargin,
+                UpperSaleBound = averageUnitsAndMoney.AverageUnits + unitsMargin,
+                LowerPriceBound = averagePrice - moneyMargin,
+                UnitsSold = model.UnitsSold,
+                MoneySold = model.MoneySold
+            };
+            return double.Parse(_evaluator.GetAttribute("OverallCondition", kbParameter));
         }
 
         private void SetTimes()

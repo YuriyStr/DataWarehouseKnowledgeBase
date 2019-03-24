@@ -1,5 +1,13 @@
 ﻿@{
     ViewBag.Title = "Анализ данных";
+    var recommendations = new Dictionary<double, string>
+    {
+        { 0, @"<p style=""color:green;"">Можно повышать цену.</p>" },
+        { 0.25, "" },
+        { 0.5, @"<p style=""color:orange;"">Необходимо повысить цену.</p>" },
+        { 0.75, @"<p style=""color:red;"">Необходимо снизить цену.</p>" },
+        { 1, @"<b style=""color:red;"">Торговля этим товаром в этом магазине нерентабельна.</b>" },
+    };
 }
 @using Microsoft.AspNetCore.Routing
 @model List<DataWarehouseKnowledgeBase.DAL.ViewModels.WarehouseViewModel>
@@ -76,7 +84,7 @@
                         <td>@item.Month</td>
                         <td>@item.Day</td>
                         <td>@item.WeekDay</td>
-                        <td>@Html.Raw(item.Recommendation)</td>
+                        <td>@Html.Raw(recommendations[item.OverallCondition])</td>
                     </tr>
                 }
             }

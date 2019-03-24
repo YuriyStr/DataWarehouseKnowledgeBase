@@ -1,22 +1,49 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <KB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Rules>
-    <Rule ThenAttributeName="PriceCondition" ThenAttributeValue="1" RequiredAttributes="UnitsSold;MoneySold">
+    <Rule ThenAttributeName="TradeCondition" ThenAttributeValue="1" RequiredAttributes="UnitsSold;LowerSaleBound">
+      <Condition InvertResult="false" Condition="{{UnitsSold}} &lt;= {{LowerSaleBound}}" />
+    </Rule>
+    <Rule ThenAttributeName="TradeCondition" ThenAttributeValue="0.5" RequiredAttributes="UnitsSold;LowerSaleBound;UpperSaleBound">
       <ConditionGroup InvertResult="false" GroupType="AND">
         <Conditions>
-          <Condition InvertResult="false" Condition="{{UnitsSold}} &gt; 0" />
-          <Condition InvertResult="false" Condition="{{MoneySold}} / {{UnitsSold}} &lt; 100" />
+          <Condition InvertResult="false" Condition="{{UnitsSold}} &gt; {{LowerSaleBound}}" />
+          <Condition InvertResult="false" Condition="{{UnitsSold}} &lt;= {{UpperSaleBound}}" />
         </Conditions>
       </ConditionGroup>
     </Rule>
-    <Rule ThenAttributeName="PriceCondition" ThenAttributeValue="0" RequiredAttributes="UnitsSold;MoneySold">
-      <Condition />
+    <Rule ThenAttributeName="TradeCondition" ThenAttributeValue="0" RequiredAttributes="UnitsSold;UpperSaleBound">
+      <Condition InvertResult="false" Condition="{{UnitsSold}} &gt; {{UpperSaleBound}}" />
     </Rule>
-    <Rule ThenAttributeName="Recommendation" ThenAttributeValue="Цена выбрана удачно." RequiredAttributes="PriceCondition">
-      <Condition InvertResult="true" Condition="{{PriceCondition}} == 1" />
+    <Rule ThenAttributeName="OverallCondition" ThenAttributeValue="1" RequiredAttributes="TradeCondition;MoneySold;UnitsSold;LowerPriceBound"><!-- Не продавать -->
+      <ConditionGroup InvertResult="false" GroupType="AND">
+        <Conditions>
+          <Condition InvertResult="false" Condition="{{TradeCondition}} == 1"></Condition>
+          <ConditionGroup InvertResult="false" GroupType="OR">
+            <Conditions>
+              <Condition InvertResult="false" Condition="{{UnitsSold}} == 0"></Condition>
+              <Condition InvertResult="false" Condition="{{MoneySold}} / {{UnitsSold}} &lt;= {{LowerPriceBound}}"></Condition>
+            </Conditions>
+          </ConditionGroup>
+        </Conditions>
+      </ConditionGroup>
     </Rule>
-    <Rule ThenAttributeName="Recommendation" ThenAttributeValue="&lt;b&gt;Необходимо поднять цену на товар.&lt;/b&gt;" RequiredAttributes="PriceCondition">
-      <Condition InvertResult="false" Condition="{{PriceCondition}} == 1" />
+    <Rule ThenAttributeName="OverallCondition" ThenAttributeValue="0.75" RequiredAttributes="TradeCondition"><!-- Снизить -->
+      <Condition InvertResult="false" Condition="{{TradeCondition}} == 1"></Condition>
+    </Rule>
+    <Rule ThenAttributeName="OverallCondition" ThenAttributeValue="0.5" RequiredAttributes="TradeCondition;MoneySold;UnitsSold;LowerPriceBound"><!--Повысить-->
+      <ConditionGroup InvertResult="false" GroupType="AND">
+        <Conditions>
+          <Condition InvertResult="false" Condition="{{TradeCondition}} == 0.5"></Condition>
+          <Condition InvertResult="false" Condition="{{MoneySold}} / {{UnitsSold}} &lt;= {{LowerPriceBound}}"></Condition>
+        </Conditions>
+      </ConditionGroup>
+    </Rule>
+    <Rule ThenAttributeName="OverallCondition" ThenAttributeValue="0.25" RequiredAttributes="TradeCondition"><!-- Подобрано хорошо -->
+      <Condition InvertResult="false" Condition="{{TradeCondition}} == 0.5"></Condition>
+    </Rule>
+    <Rule ThenAttributeName="OverallCondition" ThenAttributeValue="0" RequiredAttributes=""><!--Можно повышать-->
+      <Condition></Condition>
     </Rule>
   </Rules>
 </KB>

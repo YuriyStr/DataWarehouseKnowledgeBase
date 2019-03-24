@@ -15,6 +15,6 @@
         public int Month { get; set; }
         public int Day { get; set; }
         public string WeekDay { get; set; }
-        public string Recommendation { get; set; }
+        public double OverallCondition { get; set; }
     }
 }

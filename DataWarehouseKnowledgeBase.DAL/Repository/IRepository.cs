@@ -13,5 +13,7 @@ namespace DataWarehouseKnowledgeBase.DAL.Repository
         void UpdateWarehouse();
 
         IEnumerable<WarehouseViewModel> FetchFromWarehouse(string productCode, string storeCode, DateTime? time);
+
+        AverageMoneyAndUnits CalculateAverageMoneyAndUnits(string productCode);
     }
 }
